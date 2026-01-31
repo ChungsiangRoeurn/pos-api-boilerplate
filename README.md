@@ -1,6 +1,6 @@
 # A Boilerplate POS API
 
-A clean, type-safe **Point-of-Sale (POS)** REST API built with modern TypeScript tools. Designed with maintainability, scalability, and best practices in mind.
+A clean, type-safe **Point-of-Sale (POS)** REST API built with modern TypeScript tools. Designed with maintainability, scalability, and best practices in mind. If you want empty project, just clone or switch to boilerplate repo and you will get what you want! 
 
 ## Features
 
@@ -25,45 +25,47 @@ A clean, type-safe **Point-of-Sale (POS)** REST API built with modern TypeScript
 | Package manager | pnpm              |
 | Authentication  | JWT               |
 
-## Project Structure
+## Project Architecture
 
 ```
-
 src/
-├── repositories/       # Request/response handling
-├── controllers/       # Request/response handling
-├── services/          # Business logic + database operations
+├── repositories/      # Data access layer - database queries
+├── controllers/       # Request/response handling - HTTP layer
+├── services/          # Business logic layer
 ├── routes/            # Feature-based route definitions
 ├── middlewares/       # Validation, error handling, auth, etc.
 ├── utils/             # Helper functions & shared utilities
-├── config/            # Database Configurations & mores.
-├── database/          # scripts seed, migrate, create_table & add data
-│   └── db_schema.sql  # write database table here
-|   └── migrate.ts
-|   └── seed.ts
-|   └── seeds          # Folder for seeds data to database
-└── server.ts          # (optional) entry point if separated
+├── config/            # Database configurations & environment setup
+├── database/          # Database scripts and migrations
+│   ├── db_schema.sql  # Database table schemas
+│   ├── migrate.ts     # Migration runner script
+│   ├── seed.ts        # Seed runner script
+│   └── seeds/         # Seed data files
+└── server.ts          # Application entry point
 ```
 
 ## Quick Start
 
 ```bash
-# clone the repository
-git clone <https://github.com/ChungsiangRoeurn/pos-api-boilerplate>
+# Clone the repository
+git clone https://github.com/ChungsiangRoeurn/pos-api-boilerplate
 cd pos-api-boilerplate
 
-# install dependencies
+# Install dependencies
 pnpm install
 
-# run migrations to get table from database to your local
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your database credentials
+
+# Run migrations to create database tables
 pnpm migrate
 
-# run seed to get all data from set script files
+# Seed the database with initial data
 pnpm seed
 
-# start development server (with hot reload)
+# Start development server (with hot reload)
 pnpm dev
-
 ```
 
 ## Scripts
@@ -71,11 +73,52 @@ pnpm dev
 ```bash
 {
   "dev": "nodemon --watch 'src/**/*.ts' --exec 'node --loader ts-node/esm src/server.ts'",
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "npx nodemon",
+  "start": "node dist/server.js",
   "build": "tsc",
   "migrate": "ts-node src/database/migrate.ts",
-  "seed": "ts-node src/database/seed.ts"
+  "seed": "ts-node src/database/seed.ts",
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "lint": "eslint src/**/*.ts",
+  "lint:fix": "eslint src/**/*.ts --fix"
 }
-
 ```
+
+### Script Descriptions
+
+- `pnpm dev` — Start development server with hot reload
+- `pnpm start` — Start production server
+- `pnpm build` — Compile TypeScript to JavaScript
+- `pnpm migrate` — Run database migrations
+- `pnpm seed` — Seed database with sample data
+- `pnpm test` — Run test suite
+- `pnpm lint` — Check code for linting errors
+- `pnpm lint:fix` — Auto-fix linting errors
+
+## API Endpoints
+
+### Authentication
+```
+POST   /api/auth/register    # Register new user
+POST   /api/auth/login       # User login
+POST   /api/auth/refresh     # Refresh access token
+```
+
+### Products
+```
+GET    /api/products         # Get all products
+GET    /api/products/:id     # Get product by ID
+POST   /api/products         # Create new product
+PUT    /api/products/:id     # Update product
+DELETE /api/products/:id     # Delete product
+```
+
+### Orders
+```
+GET    /api/orders           # Get all orders
+GET    /api/orders/:id       # Get order by ID
+POST   /api/orders           # Create new order
+PUT    /api/orders/:id       # Update order status
+```
+# HAPPY CODING!
+Built with ❤️ using TypeScript and Express
