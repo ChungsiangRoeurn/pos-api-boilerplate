@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon",
     "build": "tsc",
-    "seed": "ts-node prisma/seed.ts"
+    "migrate": "ts-node src/database/migrate.ts",
+    "seed": "ts-node src/database/seed.ts"
   },
   "keywords": [],
   "author": "",

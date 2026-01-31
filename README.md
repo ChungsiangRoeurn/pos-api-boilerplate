@@ -6,10 +6,8 @@ A clean, type-safe **Point-of-Sale (POS)** REST API built with modern TypeScript
 
 - **TypeScript** — strong typing for safer & more maintainable code
 - **Express** — lightweight & flexible web framework
-- **Prisma ORM** — beautiful database modeling & type-safe queries
-- **Better Auth** — secure authentication system and maintainable 
-- **SQLite** — lightweight, zero-config database (great for dev & small/medium deployments)
-- **Zod** — powerful schema validation & runtime type checking
+- **JWT** — A proposed standard for creating data with optional signature or encryption payload holds JSON
+- **MySQL or PostgreSQL** — greate choice database (for dev & prod deployments)
 - Clean Architecture — clear separation of concerns (controllers, services, routes)
 - Centralized error handling
 - Modular & easily extensible structure
@@ -17,66 +15,67 @@ A clean, type-safe **Point-of-Sale (POS)** REST API built with modern TypeScript
 
 ## Tech Stack
 
-| Layer            | Technology           |
-|------------------|----------------------|
-| Language         | TypeScript           |
-| Framework        | Express              |
-| Database         | SQLite               |
-| ORM              | Prisma version 6     |
-| Validation       | Zod                  |
-| Runtime          | Node.js              |
-| Dev server       | Nodemon + ts-node    |
-| Package manager  | pnpm                 |
-| Authentication   | better auth          |
+| Layer           | Technology        |
+| --------------- | ----------------- |
+| Language        | TypeScript        |
+| Framework       | Express           |
+| Database        | MySQL             |
+| Runtime         | Node.js           |
+| Dev server      | Nodemon + ts-node |
+| Package manager | pnpm              |
+| Authentication  | JWT               |
 
 ## Project Structure
+
 ```
 
 src/
+├── repositories/       # Request/response handling
 ├── controllers/       # Request/response handling
 ├── services/          # Business logic + database operations
 ├── routes/            # Feature-based route definitions
 ├── middlewares/       # Validation, error handling, auth, etc.
 ├── utils/             # Helper functions & shared utilities
-├── schemas/           # Zod schemas for input validation
-├── prisma/            # Prisma schema & migrations
-│   └── schema.prisma
-├── app.ts             # Express application setup
+├── config/            # Database Configurations & mores.
+├── database/          # scripts seed, migrate, create_table & add data
+│   └── db_schema.sql  # write database table here
+|   └── migrate.ts
+|   └── seed.ts
+|   └── seeds          # Folder for seeds data to database
 └── server.ts          # (optional) entry point if separated
 ```
 
 ## Quick Start
 
 ```bash
-# 1. Clone the repository
-git clone <your-repo-url>
-cd ******
+# clone the repository
+git clone <https://github.com/ChungsiangRoeurn/pos-api-boilerplate>
+cd pos-api-boilerplate
 
-# 2. Install dependencies
+# install dependencies
 pnpm install
 
-# 3. Create/update .env (if needed)
-# You can usually use the default SQLite settings:
-# DATABASE_URL="file:./dev.db"
+# run migrations to get table from database to your local
+pnpm migrate
 
-# 4. Run Prisma migrations & generate client
-npx prisma migrate dev --name init
+# run seed to get all data from set script files
+pnpm seed
 
-# 5. Start development server (with hot reload)
+# start development server (with hot reload)
 pnpm dev
 
 ```
+
 ## Scripts
 
 ```bash
 {
-  "dev": "nodemon --watch 'src/**/*.ts' --exec 'node --loader ts-node/esm src/index.ts'",
+  "dev": "nodemon --watch 'src/**/*.ts' --exec 'node --loader ts-node/esm src/server.ts'",
   "test": "echo \"Error: no test specified\" && exit 1",
   "start": "npx nodemon",
   "build": "tsc",
-  "prisma:generate": "prisma generate",
-  "prisma:migrate": "prisma migrate dev",
-  "prisma:studio": "prisma studio"
+  "migrate": "ts-node src/database/migrate.ts",
+  "seed": "ts-node src/database/seed.ts"
 }
 
 ```
